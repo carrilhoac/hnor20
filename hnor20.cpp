@@ -2,12 +2,22 @@
 #include "hnor20.h"
 
 
+void C_hnor::TestInRange()
+{
+    if (_InRange(-21.38934, -48.704394 +360.0))
+        std::cout << "ok1" << std::endl;
+    if (_InRange( 3.23532, -61.140571 +360.0))
+        std::cout << "ok2" << std::endl;
+    if (!_InRange(-39.93551, -68.1440844 +360.0))
+        std::cout << "ok3" << std::endl;
+    if (!_InRange(32.410675, -83.414223 +360.0))
+        std::cout << "ok4" << std::endl;
+}
 bool C_hnor::_InRange(double g_lat, double g_lon) const
 {
     return g_lat > _bblat[0] && g_lat < _bblat[1]
         && g_lon > _bblon[0] && g_lon < _bblon[1];
 }
-
 bool C_hnor::_ReadDouble(std::ifstream& in_file, double *val)
 {
 	if (in_file.good())
@@ -65,7 +75,7 @@ C_hnor::C_hnor(void)
 	std::cout << _ilon << std::endl;
 	std::cout << _ilat << std::endl;
 #endif
-#if 0
+#if 1
     std::cout << _bblon[0] << " " << _bblon[1] << std::endl;
     std::cout << _bblat[0] << " " << _bblat[1] << std::endl;
 #endif

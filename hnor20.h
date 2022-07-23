@@ -1,8 +1,15 @@
+#ifndef __IBGE_HGEOHNOR2020_H__
+#define __IBGE_HGEOHNOR2020_H__
 
 
 #include <fstream>
 #include <iostream>
 
+/////////////////////////////////////////////////////////////
+// Coordinates: LAT LON in decimal degrees
+// LAT: -90.00  to  +90.00   equator
+// LON:   0.00  to  360.00   greenwich
+/////////////////////////////////////////////////////////////
 class C_hnor {
 private:
     // geoid model conversion factors
@@ -18,7 +25,7 @@ private:
 	static constexpr double 	_ilat       = 5.95  + (1.0 / 120.0);        //   5.9583333
 
 	static constexpr double 	_flon       = 329.95 + (1.0 / 120.0);       // 329.9583333
-	static constexpr double 	_flat       = -34.95  - (1.0 / 120.0);      // -34.9583333
+	static constexpr double 	_flat       = -34.95 - (1.0 / 120.0);       // -34.9583333
 
 	// axis aligned bounding box
 	static constexpr double     _bblon[2]    = { _ilon, _flon };
@@ -37,9 +44,12 @@ public:
 	C_hnor(void);
 	~C_hnor(void);
 
+	void                        TestInRange();
+
 	double                      GetFactorNearest(double g_lat, double g_lon) const;
 	double                      GetFactorBilinear(double g_lat, double g_lon) const;
 	double                      GetFactorBicubic(double g_lat, double g_lon) const; // DEFAULT
 	double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
 };
 
+#endif

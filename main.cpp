@@ -5,5 +5,7 @@ int main(int argc, char **argv)
 {
     C_hnor grid;
 
+    grid.TestInRange();
+
 	return 0;
 }
