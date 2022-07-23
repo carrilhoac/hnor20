@@ -5,6 +5,19 @@
 #include <fstream>
 #include <iostream>
 
+struct PointEntry
+{
+    int      i_row;
+    int      i_col;
+
+    double   d_lat;
+    double   d_lon;
+
+    double   factor;
+
+//PointEntry(void);
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Coordinates: LAT LON in decimal degrees
@@ -14,16 +27,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 class C_hnor {
 private:
-    struct PointEntry
-    {
-        int             i_row;
-        int             i_col;
-
-        double          d_lat;
-        double          d_lon;
-
-        double          factor;
-    };
     struct InterpBilinear
     {
         PointEntry      p00, p01;
@@ -72,6 +75,8 @@ public:
 	~C_hnor(void);
 
 	void                        TestInRange();
+
+	PointEntry                  GetEntry(double g_lat, double g_lon) const;
 
 	double                      GetFactorNearest(double g_lat, double g_lon) const;
 	double                      GetFactorBilinear(double g_lat, double g_lon) const;

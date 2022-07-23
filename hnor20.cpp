@@ -23,8 +23,28 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
+{
+    PointEntry p;
+
+    p.d_lat = g_lat;
+    p.d_lon = g_lon;
+
+    p.i_row = (_ilat - p.d_lat) * 12.0;
+    p.i_col = (p.d_lon - _ilon) * 12.0;
+
+    std::cout << p.i_row << " " << p.i_col << std::endl;
+
+    return p;
+}
+
 void C_hnor::TestInRange()
 {
+    GetEntry(-21.38934, -48.704394 +360.0);
+    GetEntry( 3.23532, -61.140571 +360.0);
+    GetEntry(-39.93551, -68.1440844 +360.0);
+    GetEntry(32.410675, -83.414223 +360.0);
+#if 0
     if (_InRange(-21.38934, -48.704394 +360.0))
         std::cout << "ok1" << std::endl;
     if (_InRange( 3.23532, -61.140571 +360.0))
@@ -33,6 +53,7 @@ void C_hnor::TestInRange()
         std::cout << "ok3" << std::endl;
     if (!_InRange(32.410675, -83.414223 +360.0))
         std::cout << "ok4" << std::endl;
+#endif
 }
 bool C_hnor::_InRange(double g_lat, double g_lon) const
 {
