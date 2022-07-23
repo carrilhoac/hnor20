@@ -12,6 +12,25 @@
 /////////////////////////////////////////////////////////////
 class C_hnor {
 private:
+    struct PointEntry
+    {
+        int             row;
+        int             col;
+        double          factor;
+    };
+    struct InterpBilinear
+    {
+        PointEntry      p00, p01;
+        PointEntry      p10, p11;
+    };
+    struct InterpBicubic
+    {
+        PointEntry      p00, p01, p02, p03;
+        PointEntry      p10, p11, p12, p13;
+        PointEntry      p20, p21, p22, p23;
+        PointEntry      p30, p31, p32, p33;
+    };
+private:
     // geoid model conversion factors
 	double **				    _fator;
 
