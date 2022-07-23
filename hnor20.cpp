@@ -1,6 +1,13 @@
 
 #include "hnor20.h"
 
+
+bool C_hnor::_InRange(double g_lat, double g_lon) const
+{
+    return g_lat > _bblat[0] && g_lat < _bblat[1]
+        && g_lon > _bblon[0] && g_lon < _bblon[1];
+}
+
 bool C_hnor::_ReadDouble(std::ifstream& in_file, double *val)
 {
 	if (in_file.good())
@@ -48,7 +55,20 @@ C_hnor::C_hnor(void)
 	_MemAlloc();
 
 	// TODO: calcular CRC32 do arquivo antes de ler
-	_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
+
+	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
+
+
+	std::cout << std::fixed;
+#if 0
+	std::cout << _step << std::endl;
+	std::cout << _ilon << std::endl;
+	std::cout << _ilat << std::endl;
+#endif
+#if 0
+    std::cout << _bblon[0] << " " << _bblon[1] << std::endl;
+    std::cout << _bblat[0] << " " << _bblat[1] << std::endl;
+#endif
 }
 
 C_hnor::~C_hnor(void)
