@@ -1,6 +1,27 @@
 
 #include "hnor20.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  assuming
+//
+//  step = 1/12
+//  1/step = 12
+//
+//  given   (i,j)  find   (lat,lon)
+//
+//  lon = ilon + j * step
+//  lat = ilat - i * step
+//
+//  inverse
+//
+//  j * step = lon - ilon =>  j =   (lon - ilon) * (1 / step)
+// -i * step = lat - ilat =>  i = - (lat - ilat) * (1 / step)
+//
+//  j = (lon - ilon) * 12
+//  i = (ilat - lat) * 12
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 void C_hnor::TestInRange()
 {

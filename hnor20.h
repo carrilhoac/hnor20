@@ -1,21 +1,27 @@
+
 #ifndef __IBGE_HGEOHNOR2020_H__
 #define __IBGE_HGEOHNOR2020_H__
-
 
 #include <fstream>
 #include <iostream>
 
-/////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+//
 // Coordinates: LAT LON in decimal degrees
 // LAT: -90.00  to  +90.00   equator
 // LON:   0.00  to  360.00   greenwich
-/////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
 class C_hnor {
 private:
     struct PointEntry
     {
-        int             row;
-        int             col;
+        int             i_row;
+        int             i_col;
+
+        double          d_lat;
+        double          d_lon;
+
         double          factor;
     };
     struct InterpBilinear
@@ -38,6 +44,8 @@ private:
 	static constexpr int 		_ncols      = 540;
 	static constexpr int 		_nrows      = 492;
 	static constexpr double 	_step       = 1.0 / 12.0;
+
+	static constexpr double     _eps        = 1e-8;
 
 	// initial and final grid coordinates
 	static constexpr double 	_ilon       = 285.0 + (1.0 / 24.0);         // 285.0416667
