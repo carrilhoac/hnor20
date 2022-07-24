@@ -2,18 +2,21 @@
 #ifndef __IBGE_HGEOHNOR2020_H__
 #define __IBGE_HGEOHNOR2020_H__
 
-#include <fstream>
-#include <iostream>
-
 struct PointEntry
 {
+    double   factor;
+
     int      i_row;
     int      i_col;
 
+    double   d_row;
+    double   d_col;
+
+    double   dif_row;
+    double   dif_col;
+
     double   d_lat;
     double   d_lon;
-
-    double   factor;
 
     PointEntry(void);
 };
@@ -67,24 +70,25 @@ private:
 	void 					    _MemFree(void);
 
 	bool					    _ReadTextFile(const char *txt_file);
-	static bool				    _ReadDouble(std::ifstream& in_file, double *val = nullptr);
 
 	bool                        _InRange(double g_lat, double g_lon) const;
 	bool                        _InRange(int n_row, int n_col) const;
+
+private:
+	double                      GetFactorNearest(double g_lat, double g_lon) const;
+	double                      GetFactorBilinear(double g_lat, double g_lon) const;
+	double                      GetFactorBicubic(double g_lat, double g_lon) const;
+	double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
+
+	PointEntry                  GetEntry(double g_lat, double g_lon) const;
+	PointEntry                  GetEntry(int n_row, int n_col) const;
 
 public:
 	C_hnor(void);
 	~C_hnor(void);
 
 	void                        TestInRange();
-
-	PointEntry                  GetEntry(double g_lat, double g_lon) const;
-	PointEntry                  GetEntry(int n_row, int n_col) const;
-
-	double                      GetFactorNearest(double g_lat, double g_lon) const;
-	double                      GetFactorBilinear(double g_lat, double g_lon) const;
-	double                      GetFactorBicubic(double g_lat, double g_lon) const; // DEFAULT
-	double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
+	void                        TestInterp();
 };
 
 #endif

@@ -1,12 +1,20 @@
 
 #include "hnor20.h"
 
+#include <cmath>
+#include <fstream>
+#include <iostream>
+
 PointEntry::PointEntry()
-    : i_row(-1)
+    : factor(0.0)
+    , i_row(-1)
     , i_col(-1)
+    , d_row(-1.0)
+    , d_col(-1.0)
+    , dif_row(0.0)
+    , dif_col(0.0)
     , d_lat(0.0)
     , d_lon(0.0)
-    , factor(0.0)
 {
 }
 
@@ -35,6 +43,11 @@ PointEntry::PointEntry()
 double C_hnor::GetFactorNearest(double g_lat, double g_lon) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
+
+    p.i_row = int(p.d_row +0.5);
+    p.i_col = int(p.d_col +0.5);
+
+    p.factor = _fator[p.i_row][p.i_col];
     return p.factor;
 }
 
@@ -52,7 +65,6 @@ PointEntry C_hnor::GetEntry(int n_row, int n_col) const
     p.d_lon = _ilon - (p.i_col * _step);
 
     p.factor = _fator[p.i_row][p.i_col];
-
   //  std::cout << p.d_lat << " " << p.d_lon << std::endl;
 
     return p;
@@ -67,16 +79,22 @@ PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
     p.d_lat = g_lat;
     p.d_lon = g_lon;
 
-    p.i_row = (_ilat - p.d_lat) * _istep;
-    p.i_col = (p.d_lon - _ilon) * _istep;
+    p.d_row = (_ilat - p.d_lat) * _istep;
+    p.d_col = (p.d_lon - _ilon) * _istep;
+
+    p.i_row = int(p.d_row);
+    p.i_col = int(p.d_col);
+
+    p.dif_row = p.d_row - std::floor(p.d_row);
+    p.dif_col = p.d_col - std::floor(p.d_col);
 
     p.factor = _fator[p.i_row][p.i_col];
-
   //  std::cout << p.i_row << " " << p.i_col << std::endl;
 
     return p;
 }
-void C_hnor::TestInRange()
+
+void C_hnor::TestInterp()
 {
     double delta_s = 0.0;
     double delta = 0.0;
@@ -110,6 +128,9 @@ void C_hnor::TestInRange()
     std::cout << delta << std::endl;
 
     std::cout << std::endl << (delta_s / 9.0) << std::endl;
+}
+void C_hnor::TestInRange()
+{
 #if 0
     GetEntry(  35, 132);
     GetEntry( 240, 55);
@@ -142,7 +163,7 @@ bool C_hnor::_InRange(int n_row, int n_col) const
     return n_row >= 0 && n_row < _nrows
         && n_col >= 0 && n_col < _ncols;
 }
-bool C_hnor::_ReadDouble(std::ifstream& in_file, double *val)
+bool _ReadDouble(std::ifstream& in_file, double *val = nullptr)
 {
 	if (in_file.good())
 	{
