@@ -78,10 +78,38 @@ PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
 }
 void C_hnor::TestInRange()
 {
-   // if (_InRange(-20.414736, 311.975325))
-   //     std::cout << "ok1" << std::endl;
+    double delta_s = 0.0;
+    double delta = 0.0;
 
-    std::cout << GetFactorNearest(-20.414736, 311.975325) << std::endl;
+    delta = GetFactorNearest(-20.414736, -49.975325 + 360.0) - ( -7.64);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-29.907579, -51.823868 + 360.0) - (  5.95);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-20.194407, -43.618629 + 360.0) - ( -5.64);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-20.895839, -54.868729 + 360.0) - (  2.83);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-25.530668, -51.774829 + 360.0) - (  4.06);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-16.090905, -57.711762 + 360.0) - (  8.35);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-11.735657, -49.138925 + 360.0) - (-16.30);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-8.593642 , -61.863849 + 360.0) - (  6.45);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+    delta = GetFactorNearest(-9.905970 , -67.738284 + 360.0) - ( 24.05);
+    delta_s += std::abs(delta);
+    std::cout << delta << std::endl;
+
+    std::cout << std::endl << (delta_s / 9.0) << std::endl;
 #if 0
     GetEntry(  35, 132);
     GetEntry( 240, 55);
@@ -171,7 +199,7 @@ C_hnor::C_hnor(void)
 	std::cout << _ilon << std::endl;
 	std::cout << _ilat << std::endl;
 #endif
-#if 1
+#if 0
     std::cout << _bblon[0] << " " << _bblon[1] << std::endl;
     std::cout << _bblat[0] << " " << _bblat[1] << std::endl;
 #endif
