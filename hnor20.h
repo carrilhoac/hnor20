@@ -15,7 +15,7 @@ struct PointEntry
 
     double   factor;
 
-//PointEntry(void);
+    PointEntry(void);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +46,7 @@ private:
 	// hgeoHNOR2020 grid constants
 	static constexpr int 		_ncols      = 540;
 	static constexpr int 		_nrows      = 492;
+	static constexpr double     _istep      = 12.0;
 	static constexpr double 	_step       = 1.0 / 12.0;
 
 	static constexpr double     _eps        = 1e-8;
@@ -69,6 +70,7 @@ private:
 	static bool				    _ReadDouble(std::ifstream& in_file, double *val = nullptr);
 
 	bool                        _InRange(double g_lat, double g_lon) const;
+	bool                        _InRange(int n_row, int n_col) const;
 
 public:
 	C_hnor(void);
@@ -77,6 +79,7 @@ public:
 	void                        TestInRange();
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
+	PointEntry                  GetEntry(int n_row, int n_col) const;
 
 	double                      GetFactorNearest(double g_lat, double g_lon) const;
 	double                      GetFactorBilinear(double g_lat, double g_lon) const;
