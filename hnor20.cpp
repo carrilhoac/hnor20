@@ -18,6 +18,31 @@ PointEntry::PointEntry()
 {
 }
 
+double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
+{
+    g_lon += 360.0;
+    double r = 0.0;
+
+    switch (m)
+    {
+        case INTERP_NEAREST:
+            r = GetFactorNearest(g_lat, g_lon);
+        break;
+        case INTERP_BILINEAR:
+            r = GetFactorBilinear(g_lat, g_lon);
+        break;
+        case INTERP_BICUBIC:
+            r = GetFactorBicubic(g_lat, g_lon);
+        break;
+        default:
+            r = GetFactorBicubic(g_lat, g_lon);
+        break;
+    }
+
+    return r;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  assuming
@@ -41,6 +66,28 @@ PointEntry::PointEntry()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 double C_hnor::GetFactorNearest(double g_lat, double g_lon) const
+{
+    PointEntry p = GetEntry(g_lat, g_lon);
+
+    p.i_row = int(p.d_row +0.5);
+    p.i_col = int(p.d_col +0.5);
+
+    p.factor = _fator[p.i_row][p.i_col];
+    return p.factor;
+}
+
+double C_hnor::GetFactorBilinear(double g_lat, double g_lon) const
+{
+    PointEntry p = GetEntry(g_lat, g_lon);
+
+    p.i_row = int(p.d_row +0.5);
+    p.i_col = int(p.d_col +0.5);
+
+    p.factor = _fator[p.i_row][p.i_col];
+    return p.factor;
+}
+
+double C_hnor::GetFactorBicubic(double g_lat, double g_lon) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
@@ -99,31 +146,31 @@ void C_hnor::TestInterp()
     double delta_s = 0.0;
     double delta = 0.0;
 
-    delta = GetFactorNearest(-20.414736, -49.975325 + 360.0) - ( -7.64);
+    delta = GetFactor(-20.414736, -49.975325) - ( -7.64);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-29.907579, -51.823868 + 360.0) - (  5.95);
+    delta = GetFactor(-29.907579, -51.823868) - (  5.95);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-20.194407, -43.618629 + 360.0) - ( -5.64);
+    delta = GetFactor(-20.194407, -43.618629) - ( -5.64);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-20.895839, -54.868729 + 360.0) - (  2.83);
+    delta = GetFactor(-20.895839, -54.868729) - (  2.83);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-25.530668, -51.774829 + 360.0) - (  4.06);
+    delta = GetFactor(-25.530668, -51.774829) - (  4.06);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-16.090905, -57.711762 + 360.0) - (  8.35);
+    delta = GetFactor(-16.090905, -57.711762) - (  8.35);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-11.735657, -49.138925 + 360.0) - (-16.30);
+    delta = GetFactor(-11.735657, -49.138925) - (-16.30);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-8.593642 , -61.863849 + 360.0) - (  6.45);
+    delta = GetFactor(-8.593642 , -61.863849) - (  6.45);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactorNearest(-9.905970 , -67.738284 + 360.0) - ( 24.05);
+    delta = GetFactor(-9.905970 , -67.738284) - ( 24.05);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
 

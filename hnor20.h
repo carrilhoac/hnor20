@@ -2,6 +2,13 @@
 #ifndef __IBGE_HGEOHNOR2020_H__
 #define __IBGE_HGEOHNOR2020_H__
 
+enum INTERP_METHOD
+{
+    INTERP_NEAREST,
+    INTERP_BILINEAR,
+    INTERP_BICUBIC
+};
+
 struct PointEntry
 {
     double   factor;
@@ -78,7 +85,7 @@ private:
 	double                      GetFactorNearest(double g_lat, double g_lon) const;
 	double                      GetFactorBilinear(double g_lat, double g_lon) const;
 	double                      GetFactorBicubic(double g_lat, double g_lon) const;
-	double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
+//  double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
 	PointEntry                  GetEntry(int n_row, int n_col) const;
@@ -86,6 +93,8 @@ private:
 public:
 	C_hnor(void);
 	~C_hnor(void);
+
+	double                      GetFactor(double g_lat, double g_lon, INTERP_METHOD m = INTERP_BICUBIC) const;
 
 	void                        TestInRange();
 	void                        TestInterp();
