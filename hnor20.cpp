@@ -7,16 +7,19 @@
 
 PointEntry::PointEntry()
     : factor(0.0)
+
     , i_row(-1)
     , i_col(-1)
+
     , d_row(-1.0)
     , d_col(-1.0)
+
     , dif_row(0.0)
     , dif_col(0.0)
+
     , d_lat(0.0)
     , d_lon(0.0)
-{
-}
+{ }
 
 double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
 {
