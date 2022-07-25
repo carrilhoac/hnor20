@@ -1,4 +1,15 @@
 
+/////////////////////////////////////////////////////////////////////
+//
+// DNIT - Departamento Nacional de Infraestrutura de Transportes
+// STE - Servicos Tecnicos de Engenharia, SA
+//
+// Autor    Andre Caceres Carrilho
+// Contato  andrecarrilho@ste-simemp.com.br
+// Data     23 jul 2022
+//
+/////////////////////////////////////////////////////////////////////
+
 #include "hnor20.h"
 #include "bicubic.h"
 

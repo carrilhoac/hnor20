@@ -1,4 +1,15 @@
 
+/////////////////////////////////////////////////////////////////////
+//
+// DNIT - Departamento Nacional de Infraestrutura de Transportes
+// STE - Servicos Tecnicos de Engenharia, SA
+//
+// Autor    Andre Caceres Carrilho
+// Contato  andrecarrilho@ste-simemp.com.br
+// Data     25 jul 2022
+//
+/////////////////////////////////////////////////////////////////////
+
 #ifndef __IBGE_HGEOHNOR2020_H__
 #define __IBGE_HGEOHNOR2020_H__
 
@@ -31,19 +42,11 @@ struct PointEntry
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Coordinates: LAT LON in decimal degrees
-// LAT: -90.00  to  +90.00   equator
-// LON:   0.00  to  360.00   greenwich
+// LAT:  -90.0  to   +90.0   equator
+// LON: -180.0  to  +180.0   greenwich
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 class C_hnor {
-private:
-    struct InterpBicubic
-    {
-        PointEntry      p00, p01, p02, p03;
-        PointEntry      p10, p11, p12, p13;
-        PointEntry      p20, p21, p22, p23;
-        PointEntry      p30, p31, p32, p33;
-    };
 private:
     // geoid model conversion factors
 	double **				    _fator;
@@ -80,7 +83,6 @@ private:
 	double                      GetFactorNearest(double g_lat, double g_lon) const;
 	double                      GetFactorBilinear(double g_lat, double g_lon) const;
 	double                      GetFactorBicubic(double g_lat, double g_lon) const;
-//  double                      GetFactorInvSqrDst(double g_lat, double g_lon) const;
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
 	PointEntry                  GetEntry(int n_row, int n_col) const;
