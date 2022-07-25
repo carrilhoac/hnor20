@@ -37,11 +37,6 @@ struct PointEntry
 ////////////////////////////////////////////////////////////////////////////////////////////////
 class C_hnor {
 private:
-    struct InterpBilinear
-    {
-        PointEntry      p00, p01;
-        PointEntry      p10, p11;
-    };
     struct InterpBicubic
     {
         PointEntry      p00, p01, p02, p03;

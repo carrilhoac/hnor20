@@ -5,6 +5,17 @@
 #include <fstream>
 #include <iostream>
 
+static double
+_Interp_Bilinear(
+        double Q00, double Q01,
+        double Q10, double Q11,
+        double dx, double dy)
+{
+    double QU = (dx * (Q01-Q00)) + Q00;
+    double QV = (dx * (Q11-Q10)) + Q10;
+    return (dy * (QV-QU)) + QU;
+}
+
 PointEntry::PointEntry()
     : factor(0.0)
 
@@ -68,6 +79,7 @@ double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 double C_hnor::GetFactorNearest(double g_lat, double g_lon) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
@@ -83,10 +95,12 @@ double C_hnor::GetFactorBilinear(double g_lat, double g_lon) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
-    p.i_row = int(p.d_row +0.5);
-    p.i_col = int(p.d_col +0.5);
+    double Q00 = _fator[p.i_row   ][p.i_col   ];
+    double Q01 = _fator[p.i_row   ][p.i_col +1];
+    double Q10 = _fator[p.i_row +1][p.i_col   ];
+    double Q11 = _fator[p.i_row +1][p.i_col +1];
 
-    p.factor = _fator[p.i_row][p.i_col];
+    p.factor = _Interp_Bilinear(Q00, Q01, Q10, Q11, p.dif_col, p.dif_row);
     return p.factor;
 }
 
@@ -149,31 +163,32 @@ void C_hnor::TestInterp()
     double delta_s = 0.0;
     double delta = 0.0;
 
-    delta = GetFactor(-20.414736, -49.975325) - ( -7.64);
+    INTERP_METHOD m = INTERP_BILINEAR;
+    delta = GetFactor(-20.414736, -49.975325, m) - ( -7.64);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-29.907579, -51.823868) - (  5.95);
+    delta = GetFactor(-29.907579, -51.823868, m) - (  5.95);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-20.194407, -43.618629) - ( -5.64);
+    delta = GetFactor(-20.194407, -43.618629, m) - ( -5.64);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-20.895839, -54.868729) - (  2.83);
+    delta = GetFactor(-20.895839, -54.868729, m) - (  2.83);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-25.530668, -51.774829) - (  4.06);
+    delta = GetFactor(-25.530668, -51.774829, m) - (  4.06);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-16.090905, -57.711762) - (  8.35);
+    delta = GetFactor(-16.090905, -57.711762, m) - (  8.35);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-11.735657, -49.138925) - (-16.30);
+    delta = GetFactor(-11.735657, -49.138925, m) - (-16.30);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-8.593642 , -61.863849) - (  6.45);
+    delta = GetFactor(-8.593642 , -61.863849, m) - (  6.45);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
-    delta = GetFactor(-9.905970 , -67.738284) - ( 24.05);
+    delta = GetFactor(-9.905970 , -67.738284, m) - ( 24.05);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
 
