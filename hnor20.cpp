@@ -17,6 +17,14 @@ _Interp_Bilinear(
     return (dy * (QV-QU)) + QU;
 }
 
+static double
+_Interp_Bicubic(
+        double Q[4][4],
+        double dx, double dy)
+{
+    return 0.0;
+}
+
 PointEntry::PointEntry()
     : factor(0.0)
 
@@ -111,11 +119,12 @@ double C_hnor::GetFactorBicubic(double g_lat, double g_lon) const
 
 	double QF[4][4];
 	
-	for (int i = p.i_row - 1; i <= p.i_row+1; ++i){
-	for (int j = p.i_col - 1; j <= p.i_col+1; ++j){
+	for (int i = 0, u = p.i_row -1; i < 4; ++i, ++u){
+	for (int j = 0, v = p.i_col -1; j < 4; ++j, ++v){
+		QF[i][j] = _fator[u][v];
 	} }
 
-    p.factor = _fator[p.i_row][p.i_col];
+    p.factor = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
     return p.factor;
 }
 
