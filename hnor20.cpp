@@ -1,5 +1,6 @@
 
 #include "hnor20.h"
+#include "bicubic.h"
 
 #include <cmath>
 #include <fstream>
@@ -108,8 +109,11 @@ double C_hnor::GetFactorBicubic(double g_lat, double g_lon) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
-    p.i_row = int(p.d_row +0.5);
-    p.i_col = int(p.d_col +0.5);
+	double QF[4][4];
+	
+	for (int i = p.i_row - 1; i <= p.i_row+1; ++i){
+	for (int j = p.i_col - 1; j <= p.i_col+1; ++j){
+	} }
 
     p.factor = _fator[p.i_row][p.i_col];
     return p.factor;
@@ -255,9 +259,8 @@ bool C_hnor::_ReadTextFile(const char *txt_file)
 		return false;
 	}
 
-	for (int i = 0; i < _nrows; ++i)
-	for (int j = 0; j < _ncols; ++j)
-	{{
+	for (int i = 0; i < _nrows; ++i){
+	for (int j = 0; j < _ncols; ++j){
 		if (!_ReadDouble(in_file)) { return false; }
 		if (!_ReadDouble(in_file)) { return false; }
 		if (!_ReadDouble(in_file, &_fator[i][j])) { return false; }

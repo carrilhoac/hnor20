@@ -7,3 +7,9 @@ hnor.depend
 obj/Release/hnor20.o
 hnor.layout
 bin/hgeoHNOR2020.kml
+build.bat
+hgeoHNOR2020__IMBITUBA__fator-conversao.txt
+hnor.exe
+m44/m44.cpp
+m44/m44.h
+m44/main.cpp
