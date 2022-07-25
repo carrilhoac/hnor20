@@ -1,4 +1,15 @@
 
+/////////////////////////////////////////////////////////////////////
+//
+// DNIT - Departamento Nacional de Infraestrutura de Transportes
+// STE - Servicos Tecnicos de Engenharia, SA
+//
+// Autor    Andre Caceres Carrilho
+// Contato  andrecarrilho@ste-simemp.com.br
+// Data     25 jul 2022
+//
+/////////////////////////////////////////////////////////////////////
+
 #include "bicubic.h"
 
 double CubicSpline::Eval(double x) const{
@@ -50,20 +61,3 @@ void CubicSpline::Fit(
    
     _parms = A.Solve(b);
 }
-
-/*
-int main(int argc, char **argv)
-{
-	Point p1 = { 1.0, 1.1 };
-	Point p2 = { 2.0, 3.5 };
-	Point p3 = { 3.0, 0.9 };
-	Point p4 = { 4.0, 4.2 };
-	
-	CubicSpline spline;
-	spline.Fit(p1, p2, p3, p4);
-	
-	std::cout << spline.Eval(2.14888) << std::endl;
-	
-    return 0;
-}
-*/
