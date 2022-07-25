@@ -21,8 +21,53 @@ static double
 _Interp_Bicubic(
         double Q[4][4],
         double dx, double dy)
-{
-    return 0.0;
+{	
+	Point p1 = { -1.0, 0.0 };
+	Point p2 = {  0.0, 0.0 };
+	Point p3 = {  1.0, 0.0 };
+	Point p4 = {  2.0, 0.0 };
+	
+	CubicSpline spline;
+	
+	p1.y = Q[0][0];
+	p2.y = Q[0][1];
+	p3.y = Q[0][2];
+	p4.y = Q[0][3];
+	
+	spline.Fit(p1, p2, p3, p4);	
+	double QA = spline.Eval(dx);
+	
+	p1.y = Q[1][0];
+	p2.y = Q[1][1];
+	p3.y = Q[1][2];
+	p4.y = Q[1][3];
+	
+	spline.Fit(p1, p2, p3, p4);	
+	double QB = spline.Eval(dx);
+	
+	p1.y = Q[2][0];
+	p2.y = Q[2][1];
+	p3.y = Q[2][2];
+	p4.y = Q[2][3];
+	
+	spline.Fit(p1, p2, p3, p4);	
+	double QC = spline.Eval(dx);
+	
+	p1.y = Q[3][0];
+	p2.y = Q[3][1];
+	p3.y = Q[3][2];
+	p4.y = Q[3][3];
+	
+	spline.Fit(p1, p2, p3, p4);	
+	double QD = spline.Eval(dx);
+	
+	p1.y = QA;
+	p2.y = QB;
+	p3.y = QC;
+	p4.y = QD;
+	
+	spline.Fit(p1, p2, p3, p4);		
+    return spline.Eval(dy);
 }
 
 PointEntry::PointEntry()
@@ -176,7 +221,7 @@ void C_hnor::TestInterp()
     double delta_s = 0.0;
     double delta = 0.0;
 
-    INTERP_METHOD m = INTERP_BILINEAR;
+    INTERP_METHOD m = INTERP_BICUBIC;
     delta = GetFactor(-20.414736, -49.975325, m) - ( -7.64);
     delta_s += std::abs(delta);
     std::cout << delta << std::endl;
