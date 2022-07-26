@@ -92,9 +92,6 @@ public:
 	~C_hnor(void);
 
 	double                      GetFactor(double g_lat, double g_lon, INTERP_METHOD m = INTERP_BICUBIC) const;
-
-	void                        TestInRange();
-	void                        TestInterp();
 };
 
 #endif
