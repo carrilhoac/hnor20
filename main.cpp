@@ -1,5 +1,8 @@
 
 #include "hnor20.h"
+#include "UTM.h"
+#include "pnpoly.h"
+
 #include <iostream>
 
 void TestInterp()
