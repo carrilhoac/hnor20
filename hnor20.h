@@ -6,7 +6,7 @@
 //
 // Autor    Andre Caceres Carrilho
 // Contato  andrecarrilho@ste-simemp.com.br
-// Data     25 jul 2022
+// Data     22 jul 2022
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -20,25 +20,6 @@ enum INTERP_METHOD
     INTERP_BICUBIC
 };
 
-struct PointEntry
-{
-    double   factor;
-
-    int      i_row;
-    int      i_col;
-
-    double   d_row;
-    double   d_col;
-
-    double   dif_row;
-    double   dif_col;
-
-    double   d_lat;
-    double   d_lon;
-
-    PointEntry(void);
-};
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Coordinates: LAT LON in decimal degrees
@@ -47,6 +28,26 @@ struct PointEntry
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 class C_hnor {
+private:
+	struct PointEntry
+	{
+		double   factor;
+
+		int      i_row;
+		int      i_col;
+
+		double   d_row;
+		double   d_col;
+
+		double   dif_row;
+		double   dif_col;
+
+		double   d_lat;
+		double   d_lon;
+
+		PointEntry(void);
+	};
+
 private:
     // geoid model conversion factors
 	double **				    _fator;
@@ -57,7 +58,7 @@ private:
 	static constexpr double     _istep      = 12.0;
 	static constexpr double 	_step       = 1.0 / 12.0;
 
-	static constexpr double     _eps        = 1e-8;
+	//static constexpr double     _eps        = 1e-8;
 
 	// initial and final grid coordinates
 	static constexpr double 	_ilon       = 285.0 + (1.0 / 24.0);         // 285.0416667

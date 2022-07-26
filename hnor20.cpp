@@ -6,7 +6,7 @@
 //
 // Autor    Andre Caceres Carrilho
 // Contato  andrecarrilho@ste-simemp.com.br
-// Data     23 jul 2022
+// Data     22 jul 2022
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -81,7 +81,7 @@ _Interp_Bicubic(
     return spline.Eval(dy);
 }
 
-PointEntry::PointEntry()
+C_hnor::PointEntry::PointEntry()
     : factor(0.0)
 
     , i_row(-1)
@@ -184,7 +184,7 @@ double C_hnor::GetFactorBicubic(double g_lat, double g_lon) const
     return p.factor;
 }
 
-PointEntry C_hnor::GetEntry(int n_row, int n_col) const
+C_hnor::PointEntry C_hnor::GetEntry(int n_row, int n_col) const
 {
     PointEntry p;
 
@@ -202,7 +202,7 @@ PointEntry C_hnor::GetEntry(int n_row, int n_col) const
 
     return p;
 }
-PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
+C_hnor::PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
 {
     PointEntry p;
 
