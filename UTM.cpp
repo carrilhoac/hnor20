@@ -9,7 +9,7 @@
  @author Chuck Gantz- chuck.gantz@globalstar.com
  */
 
-#include "UTM.h"
+#include "utm.h"
 
 #include <cmath>
 #include <cstdio>

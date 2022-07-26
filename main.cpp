@@ -1,6 +1,6 @@
 
 #include "hnor20.h"
-#include "UTM.h"
+#include "utm.h"
 #include "pnpoly.h"
 
 #include <iostream>
