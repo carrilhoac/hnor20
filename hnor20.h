@@ -13,6 +13,8 @@
 #ifndef __IBGE_HGEOHNOR2020_H__
 #define __IBGE_HGEOHNOR2020_H__
 
+#include <string>
+
 enum INTERP_METHOD
 {
     INTERP_NEAREST,
@@ -118,14 +120,24 @@ public:
 	double                      GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METHOD m = INTERP_BICUBIC) const;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 struct PointResult 
 {
-	double 		_fator;
-	double		_incer;
+	double			_lat;
+	double			_lon;
+		
+	double 			_utm_E;
+	double			_utm_N;
+	int				_utm_Fuso;
+	char			_utm_Emisph;	 // N or S
+		
+	double 			_fator;
+	double			_incer;
+	std::string 	_model;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 class HNOR {
 private:
@@ -134,6 +146,8 @@ private:
 	CGrid 	_mapgeo15;
 	
 public:
+	HNOR(void);
+
 	PointResult		Get(double g_lat, double g_lon, INTERP_METHOD m = INTERP_BICUBIC) const;
 };
 

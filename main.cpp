@@ -63,7 +63,8 @@ void TestInterp()
 
 int main(int argc, char **argv)
 {
-    TestInterp();
-
+   // TestInterp();
+	HNOR geoid;
+	
 	return 0;
 }

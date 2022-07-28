@@ -12,6 +12,7 @@
 
 #include "hnor20.h"
 #include "bicubic.h"
+#include "pnpoly.h"
 
 #include <cmath>
 #include <fstream>
@@ -465,4 +466,41 @@ void CGrid::_MemFree(void)
 {
 	_GridMemFree(_fator, _nrows, _ncols);
 	_GridMemFree(_incer, _nrows, _ncols);
+}
+
+
+HNOR::HNOR(void)
+	: _imbituba(GRID_IMBITUBA)
+	, _santana(GRID_SANTANA)
+	, _mapgeo15(GRID_MAPGEO2015)
+{ }
+
+PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
+{
+	PointResult r;
+	
+	r._lat = g_lat;
+	r._lon = g_lon;
+	
+	if (PnPoly::Get().InsideSANTANA(g_lat, g_lon))
+	{
+		r._fator = _santana.GetValue(g_lat, g_lon, false, m);
+		r._incer = _santana.GetValue(g_lat, g_lon, true, m);
+		r._model = "SANTANA";
+	} 
+	else 
+	if (PnPoly::Get().InsideMAPGEO15(g_lat, g_lon))
+	{
+		r._fator = _mapgeo15.GetValue(g_lat, g_lon, false, m);
+		r._incer = _mapgeo15.GetValue(g_lat, g_lon, true, m);
+		r._model = "MAPGEO2015";
+	}
+	else 
+	{
+		r._fator = _imbituba.GetValue(g_lat, g_lon, false, m);
+		r._incer = _imbituba.GetValue(g_lat, g_lon, true, m);
+		r._model = "IMBITUBA";
+	}
+	
+	return r;	
 }
