@@ -48,28 +48,65 @@ private:
 		PointEntry(void);
 	};
 
+	void _SetGridImbituba(void)
+	{
+		_ncols = 540;
+		_nrows = 492;
+		
+		// initial and final grid coordinates
+		_ilon  = 285.0 + (1.0 / 24.0);         // 285.0416667
+		_ilat  = 5.95  + (1.0 / 120.0);        //   5.9583333
+	
+		_flon  = 329.95 + (1.0 / 120.0);       // 329.9583333
+		_flat  = -34.95 - (1.0 / 120.0);       // -34.9583333
+		
+		_UpdateBoundingBox();
+	}
+	void _SetGridSantana(void)
+	{
+		_ncols = 96;
+		_nrows = 96;
+		
+		// initial and final grid coordinates
+		_ilon    = 5.45 + (1.0 / 120.0);       //   5.45833333
+		_ilat  = 303.0  + (1.0 / 24.0);        // 303.0416667
+	
+		_flon  =  -2.45 - (1.0 / 120.0);       //  -2.4583333 
+		_flat  = 310.95 + (1.0 / 120.0);       // 310.9583333
+		
+		_UpdateBoundingBox();
+	}
+	void _UpdateBoundingBox(void)
+	{
+		_bblon[0] = _ilon;
+		_bblon[1] = _flon;
+		
+		_bblat[0] = _flat;
+		_bblat[1] = _ilat;
+	}
+
 private:
     // geoid model conversion factors
 	double **				    _fator;
 
 	// hgeoHNOR2020 grid constants
-	static constexpr int 		_ncols      = 540;
-	static constexpr int 		_nrows      = 492;
 	static constexpr double     _istep      = 12.0;
 	static constexpr double 	_step       = 1.0 / 12.0;
 
-	//static constexpr double     _eps        = 1e-8;
+	int 						_ncols;
+	int 						_nrows;
 
 	// initial and final grid coordinates
-	static constexpr double 	_ilon       = 285.0 + (1.0 / 24.0);         // 285.0416667
-	static constexpr double 	_ilat       = 5.95  + (1.0 / 120.0);        //   5.9583333
-
-	static constexpr double 	_flon       = 329.95 + (1.0 / 120.0);       // 329.9583333
-	static constexpr double 	_flat       = -34.95 - (1.0 / 120.0);       // -34.9583333
+	double 						_ilon;       
+	double 						_ilat;        
+					
+	double 						_flon;      
+	double 						_flat;      
 
 	// axis aligned bounding box
-	static constexpr double     _bblon[2]    = { _ilon, _flon };
-	static constexpr double     _bblat[2]    = { _flat, _ilat };
+	double     					_bblon[2];
+	double     					_bblat[2];
+
 
 private:
 	void 					    _MemAlloc(void);

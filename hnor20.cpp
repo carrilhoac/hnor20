@@ -298,6 +298,8 @@ bool C_hnor::_ReadBinFile(const char *txt_file)
 C_hnor::C_hnor(void)
 	: _fator(nullptr)
 {
+	_SetGridImbituba();
+	
 	_MemAlloc();
 
 	// TODO: calcular CRC32 do arquivo antes de ler
