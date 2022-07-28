@@ -7,6 +7,7 @@
 
 void TestInterp()
 {
+#if 0
     double delta_s = 0.0;
     double delta = 0.0;
 
@@ -57,6 +58,7 @@ void TestInterp()
     delta_s += std::abs(delta);	    std::cout << delta << std::endl;
 
     std::cout << std::endl << (delta_s / 21.0) << std::endl;
+#endif 
 }
 
 int main(int argc, char **argv)

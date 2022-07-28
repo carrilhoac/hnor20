@@ -20,6 +20,13 @@ enum INTERP_METHOD
     INTERP_BICUBIC
 };
 
+enum GRID_NAME
+{
+	GRID_IMBITUBA,
+	GRID_SANTANA,
+	GRID_MAPGEO2015
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Coordinates: LAT LON in decimal degrees
@@ -53,6 +60,8 @@ private:
     // geoid model conversion factors
 	double **				    _fator;
 	double **					_incer;
+
+	GRID_NAME					_name;
 
 	// hgeoHNOR2020 grid constants
 	static constexpr double     _istep      = 12.0;
@@ -100,8 +109,7 @@ public:
 	C_hnor(void);
 	~C_hnor(void);
 
-	double                      GetFactor(double g_lat, double g_lon, INTERP_METHOD m = INTERP_BICUBIC) const;
-	double                      GetUncertainty(double g_lat, double g_lon, INTERP_METHOD m = INTERP_BICUBIC) const;
+	double                      GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METHOD m = INTERP_BICUBIC) const;
 };
 
 #endif

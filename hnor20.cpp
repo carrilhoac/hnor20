@@ -109,6 +109,7 @@ void C_hnor::_SetGridImbituba(void)
 	_flon  = 329.95 + (1.0 / 120.0);       // 329.9583333
 	_flat  = -34.95 - (1.0 / 120.0);       // -34.9583333
 	
+	_name = GRID_IMBITUBA;
 	_UpdateBoundingBox();
 }
 void C_hnor::_SetGridSantana(void)
@@ -122,6 +123,7 @@ void C_hnor::_SetGridSantana(void)
 	_flon  =  -2.45 - (1.0 / 120.0);       //  -2.4583333 
 	_flat  = 310.95 + (1.0 / 120.0);       // 310.9583333
 	
+	_name = GRID_SANTANA;
 	_UpdateBoundingBox();
 }
 void C_hnor::_SetGridMapgeo(void)
@@ -135,6 +137,7 @@ void C_hnor::_SetGridMapgeo(void)
 	_flon  = 296.45 + (1.0 / 120.0); 		//  296.4583333
 	_flat  = -11.95 - (1.0 / 120.0); 		//  -11.9583333
 	
+	_name = GRID_MAPGEO2015;
 	_UpdateBoundingBox();
 }
 void C_hnor::_UpdateBoundingBox(void)
@@ -146,30 +149,34 @@ void C_hnor::_UpdateBoundingBox(void)
 	_bblat[1] = _ilat;
 }
 
-double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
+double C_hnor::GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METHOD m) const
 {
     g_lon += 360.0;
     double r = 0.0;
 
+	if (get_uncert && _name == GRID_MAPGEO2015)
+	{
+		return -9999.0;
+	}
+
     switch (m)
     {
         case INTERP_NEAREST:
-            r = GetNearest(g_lat, g_lon);
+            r = GetNearest(g_lat, g_lon, get_uncert);
         break;
         case INTERP_BILINEAR:
-            r = GetBilinear(g_lat, g_lon);
+            r = GetBilinear(g_lat, g_lon, get_uncert);
         break;
         case INTERP_BICUBIC:
-            r = GetBicubic(g_lat, g_lon);
+            r = GetBicubic(g_lat, g_lon, get_uncert);
         break;
         default:
-            r = GetBicubic(g_lat, g_lon);
+            r = GetBicubic(g_lat, g_lon, get_uncert);
         break;
     }
 
     return r;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
