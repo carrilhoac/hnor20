@@ -14,6 +14,7 @@
 #define __IBGE_HGEOHNOR2020_H__
 
 #include <string>
+#include <iostream>
 
 enum INTERP_METHOD
 {
@@ -99,7 +100,6 @@ private:
 	void 					    _MemAlloc(void);
 	void 					    _MemFree(void);
 
-	bool					    _ReadTextFile(const char *txt_file);	// DEPRECATED
 	bool					    _ReadBinFile(const char *txt_file);
 
 	bool                        _InRange(double g_lat, double g_lon) const;
@@ -124,7 +124,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////
 struct PointResult 
 {
-	double			_lat;
+	double			_lat;			 // WGS84
 	double			_lon;
 		
 	double 			_utm_E;
@@ -135,6 +135,8 @@ struct PointResult
 	double 			_fator;
 	double			_incer;
 	std::string 	_model;
+	
+	friend std::ostream& operator << (std::ostream& os, const PointResult& pt);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -109,7 +109,7 @@ int	CGrid::_OffsetSantana()const
 }
 int	CGrid::_OffsetMapgeo()const
 {
-	return _OffsetSantana() + 96 * 96 * 2 * sizeof(float);
+	return _OffsetSantana() + (96 * 96 * 2 * sizeof(float));
 }
 	
 void CGrid::_SetGridImbituba(void)
@@ -127,22 +127,25 @@ void CGrid::_SetGridImbituba(void)
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetImbituba();
+	
+	//std::cout << "Grid set to IMBITUBA\n";
 }
 void CGrid::_SetGridSantana(void)
 {
 	_ncols = 96;
 	_nrows = 96;
 	
-	_ilon  =   5.45 + (1.0 / 120.0);       //   5.45833333
-	_ilat  = 303.0  + (1.0 / 24.0);        // 303.0416667
+	_ilat  =   5.45 + (1.0 / 120.0);       //   5.45833333
+	_ilon  = 303.0  + (1.0 / 24.0);        // 303.0416667
 
-	_flon  =  -2.45 - (1.0 / 120.0);       //  -2.4583333 
-	_flat  = 310.95 + (1.0 / 120.0);       // 310.9583333
+	_flat  =  -2.45 - (1.0 / 120.0);       //  -2.4583333 
+	_flon  = 310.95 + (1.0 / 120.0);       // 310.9583333
 	
 	_name = GRID_SANTANA;
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetSantana();
+	//std::cout << "Grid set to SANTANA\n";
 }
 void CGrid::_SetGridMapgeo(void)
 {
@@ -159,6 +162,7 @@ void CGrid::_SetGridMapgeo(void)
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetMapgeo();
+	//std::cout << "Grid set to MAPGEO\n";
 }
 void CGrid::_UpdateBoundingBox(void)
 {
@@ -273,7 +277,9 @@ double CGrid::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 		for (int j = 0, v = p.i_col -1; j < 4; ++j, ++v){
 			QF[i][j] = _incer[u][v];
 		} }
+//	std::cout << "ok_0" << std::endl;
 		p.uncertainty = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
+//	std::cout << "ok_i" << std::endl;
 		return p.uncertainty;
 	}
 	for (int i = 0, u = p.i_row -1; i < 4; ++i, ++u){
@@ -281,10 +287,12 @@ double CGrid::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 		QF[i][j] = _fator[u][v];
 	} }
 
+//	std::cout << "ok_1" << std::endl;
     p.factor = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
+//	std::cout << "ok_f" << std::endl;
     return p.factor;
 }
-
+/*
 CGrid::PointEntry CGrid::GetEntry(int n_row, int n_col) const
 {
     PointEntry p;
@@ -303,14 +311,17 @@ CGrid::PointEntry CGrid::GetEntry(int n_row, int n_col) const
   //  std::cout << p.d_lat << " " << p.d_lon << std::endl;
 
     return p;
-}
+}*/
 CGrid::PointEntry CGrid::GetEntry(double g_lat, double g_lon) const
 {
     PointEntry p;
-
+	
+	//std::cout << "ok1" << std::endl;
+	
     if (!_InRange(g_lat, g_lon))
         return p;
 
+	//std::cout << "ok2" << std::endl;
     p.d_lat = g_lat;
     p.d_lon = g_lon;
 
@@ -322,16 +333,19 @@ CGrid::PointEntry CGrid::GetEntry(double g_lat, double g_lon) const
 
     p.dif_row = p.d_row - std::floor(p.d_row);
     p.dif_col = p.d_col - std::floor(p.d_col);
-
+ 
     p.factor = _fator[p.i_row][p.i_col];
 	p.uncertainty = _incer[p.i_row][p.i_col];
-  //  std::cout << p.i_row << " " << p.i_col << std::endl;
+   // std::cout << p.i_row << " " << p.i_col << std::endl;
 
     return p;
 }
 
 bool CGrid::_InRange(double g_lat, double g_lon) const
 {
+	//std::cout << g_lat << " " << _bblat[0] << " " << _bblat[1] << std::endl;
+	//std::cout << g_lon << " " << _bblon[0] << " " << _bblon[1] << std::endl;
+	
     return g_lat > _bblat[0] && g_lat < _bblat[1]
         && g_lon > _bblon[0] && g_lon < _bblon[1];
 }
@@ -339,43 +353,6 @@ bool CGrid::_InRange(int n_row, int n_col) const
 {
     return n_row >= 0 && n_row < _nrows
         && n_col >= 0 && n_col < _ncols;
-}
-bool _ReadDouble(std::ifstream& in_file, double *val = nullptr) // DEPRECATED
-{
-	if (in_file.good())
-	{
-		if (val)
-		{
-			in_file >> *val;
-		}
-		else
-		{
-			double _read_temp;
-			in_file >> _read_temp;
-		}
-		return true;
-	}
-	return false;
-}
-bool CGrid::_ReadTextFile(const char *txt_file) // DEPRECATED
-{
-	std::ifstream  in_file;
-	in_file.open(txt_file);
-
-	if (!in_file.good())
-	{
-		return false;
-	}
-
-	for (int i = 0; i < _nrows; ++i){
-	for (int j = 0; j < _ncols; ++j){
-		if (!_ReadDouble(in_file)) { return false; }
-		if (!_ReadDouble(in_file)) { return false; }
-		if (!_ReadDouble(in_file, &_fator[i][j])) { return false; }
-	}}
-
-	in_file.close();
-	return true;
 }
 bool CGrid::_ReadBinFile(const char *txt_file)
 {
@@ -460,12 +437,35 @@ void CGrid::_MemAlloc(void)
 	_MemFree();	
 	_fator = _GridMemAlloc(_nrows, _ncols);
 	_incer = _GridMemAlloc(_nrows, _ncols);
+	
+	//std::cout << _nrows << " "  << _ncols << std::endl;
 }
 
 void CGrid::_MemFree(void)
 {
 	_GridMemFree(_fator, _nrows, _ncols);
 	_GridMemFree(_incer, _nrows, _ncols);
+}
+
+#include <iomanip>
+
+std::ostream& operator << (std::ostream& os, const PointResult& pt)
+{
+	os << std::fixed;
+	os << std::endl;
+	os << std::setprecision(5);
+	os << "LAT: " << pt._lat << "\nLON: " << pt._lon << std::endl;
+	os << std::setprecision(3);
+	//os << "\t" << pt._utm_E << "\t" << pt._utm_N << "\t" << pt._utm_Fuso << "\t" << pt._utm_Emisph << std::endl; 
+	os << std::setprecision(2);
+	os << "FATOR: " << pt._fator << " m" << std::endl;
+	if (pt._incer < -9990.0)
+		os << "INCERTEZA: n.d." << std::endl;
+	else
+		os << "INCERTEZA: " << pt._incer << " m" << std::endl;
+	os << "MODELO: " << pt._model << std::endl;
+	os << std::endl;	
+	return os;
 }
 
 
@@ -484,23 +484,26 @@ PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
 	
 	if (PnPoly::Get().InsideSANTANA(g_lat, g_lon))
 	{
+		//std::cout << "santana" << std::endl;
+		
 		r._fator = _santana.GetValue(g_lat, g_lon, false, m);
 		r._incer = _santana.GetValue(g_lat, g_lon, true, m);
 		r._model = "SANTANA";
+		return r;
 	} 
-	else 
 	if (PnPoly::Get().InsideMAPGEO15(g_lat, g_lon))
 	{
+		//std::cout << "mapgeo15" << std::endl;
+		
 		r._fator = _mapgeo15.GetValue(g_lat, g_lon, false, m);
 		r._incer = _mapgeo15.GetValue(g_lat, g_lon, true, m);
 		r._model = "MAPGEO2015";
+		return r;
 	}
-	else 
-	{
-		r._fator = _imbituba.GetValue(g_lat, g_lon, false, m);
-		r._incer = _imbituba.GetValue(g_lat, g_lon, true, m);
-		r._model = "IMBITUBA";
-	}
-	
+	//std::cout << "imbituba" << std::endl;
+
+	r._fator = _imbituba.GetValue(g_lat, g_lon, false, m);
+	r._incer = _imbituba.GetValue(g_lat, g_lon, true, m);
+	r._model = "IMBITUBA";
 	return r;	
 }
