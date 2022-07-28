@@ -21,7 +21,12 @@ extern "C"
 	}
 }
 
-bool PolySANTANA::Inside(double g_lat, double g_lon) const
+bool PnPoly::InsideSANTANA(double g_lat, double g_lon) const
 {
-	return pnpoly(8, poly_lon, poly_lat, g_lon, g_lat);
+	return pnpoly(8, p_sant_lon, p_sant_lat, g_lon, g_lat);
+}
+
+bool PnPoly::InsideMAPGEO15(double g_lat, double g_lon) const
+{
+	return pnpoly(7, p_mgeo_lon, p_mgeo_lat, g_lon, g_lat);
 }
