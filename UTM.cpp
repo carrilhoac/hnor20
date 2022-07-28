@@ -51,6 +51,7 @@ namespace UTM
      *
      * Written by Chuck Gantz- chuck.gantz@globalstar.com
      */
+	 /*
     char UTMLetterDesignator(double Lat)
     {
         char LetterDesignator;
@@ -77,6 +78,15 @@ namespace UTM
         else if((-72 > Lat) && (Lat >= -80)) LetterDesignator = 'C';
         // 'Z' is an error flag, the Latitude is outside the UTM limits
         else LetterDesignator = 'Z';
+        return LetterDesignator;
+    } */
+	char UTMLetterDesignator(double Lat)
+    {
+        char LetterDesignator;
+
+        if     (Lat >= 0.0)  LetterDesignator = 'N';
+        else  LetterDesignator = 'S';
+
         return LetterDesignator;
     }
 
