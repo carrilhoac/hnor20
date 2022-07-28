@@ -13,7 +13,7 @@ void TestInterp()
 
     INTERP_METHOD m = INTERP_BICUBIC;
 	
-    C_hnor grid;
+    CGrid	grid;
     delta = grid.GetFactor(-20.414736, -49.975325, m) - ( -7.64);
     delta_s += std::abs(delta);	    std::cout << delta << std::endl;
     delta = grid.GetFactor(-29.907579, -51.823868, m) - (  5.95);

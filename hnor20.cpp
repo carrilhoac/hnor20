@@ -81,7 +81,7 @@ _Interp_Bicubic(
     return spline.Eval(dy);
 }
 
-C_hnor::PointEntry::PointEntry()
+CGrid::PointEntry::PointEntry()
     : factor(0.0)
 	, uncertainty(0.0)
 
@@ -98,10 +98,23 @@ C_hnor::PointEntry::PointEntry()
     , d_lon(0.0)
 { }
 
-void C_hnor::_SetGridImbituba(void)
+int CGrid::_OffsetImbituba()const
+{
+	return 0;
+}
+int	CGrid::_OffsetSantana()const
+{
+	return 540 * 492 * 2 * sizeof(float);
+}
+int	CGrid::_OffsetMapgeo()const
+{
+	return _OffsetSantana() + 96 * 96 * 2 * sizeof(float);
+}
+	
+void CGrid::_SetGridImbituba(void)
 {
 	_ncols = 540;
-	_nrows = 492;
+	_nrows = 492;	
 	
 	_ilon  = 285.0 + (1.0 / 24.0);         // 285.0416667
 	_ilat  = 5.95  + (1.0 / 120.0);        //   5.9583333
@@ -111,8 +124,10 @@ void C_hnor::_SetGridImbituba(void)
 	
 	_name = GRID_IMBITUBA;
 	_UpdateBoundingBox();
+	
+	_offset = _OffsetImbituba();
 }
-void C_hnor::_SetGridSantana(void)
+void CGrid::_SetGridSantana(void)
 {
 	_ncols = 96;
 	_nrows = 96;
@@ -125,8 +140,10 @@ void C_hnor::_SetGridSantana(void)
 	
 	_name = GRID_SANTANA;
 	_UpdateBoundingBox();
+	
+	_offset = _OffsetSantana();
 }
-void C_hnor::_SetGridMapgeo(void)
+void CGrid::_SetGridMapgeo(void)
 {
 	_ncols = 138;
 	_nrows = 192;
@@ -139,8 +156,10 @@ void C_hnor::_SetGridMapgeo(void)
 	
 	_name = GRID_MAPGEO2015;
 	_UpdateBoundingBox();
+	
+	_offset = _OffsetMapgeo();
 }
-void C_hnor::_UpdateBoundingBox(void)
+void CGrid::_UpdateBoundingBox(void)
 {
 	_bblon[0] = _ilon;
 	_bblon[1] = _flon;
@@ -149,7 +168,7 @@ void C_hnor::_UpdateBoundingBox(void)
 	_bblat[1] = _ilat;
 }
 
-double C_hnor::GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METHOD m) const
+double CGrid::GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METHOD m) const
 {
     g_lon += 360.0;
     double r = 0.0;
@@ -201,7 +220,7 @@ double C_hnor::GetValue(double g_lat, double g_lon, bool get_uncert, INTERP_METH
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-double C_hnor::GetNearest(double g_lat, double g_lon, bool _is_uncert) const
+double CGrid::GetNearest(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
@@ -217,7 +236,7 @@ double C_hnor::GetNearest(double g_lat, double g_lon, bool _is_uncert) const
     return p.factor;
 }
 
-double C_hnor::GetBilinear(double g_lat, double g_lon, bool _is_uncert) const
+double CGrid::GetBilinear(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
@@ -241,7 +260,7 @@ double C_hnor::GetBilinear(double g_lat, double g_lon, bool _is_uncert) const
     return p.factor;
 }
 
-double C_hnor::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
+double CGrid::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
@@ -265,7 +284,7 @@ double C_hnor::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
     return p.factor;
 }
 
-C_hnor::PointEntry C_hnor::GetEntry(int n_row, int n_col) const
+CGrid::PointEntry CGrid::GetEntry(int n_row, int n_col) const
 {
     PointEntry p;
 
@@ -284,7 +303,7 @@ C_hnor::PointEntry C_hnor::GetEntry(int n_row, int n_col) const
 
     return p;
 }
-C_hnor::PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
+CGrid::PointEntry CGrid::GetEntry(double g_lat, double g_lon) const
 {
     PointEntry p;
 
@@ -310,17 +329,17 @@ C_hnor::PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
     return p;
 }
 
-bool C_hnor::_InRange(double g_lat, double g_lon) const
+bool CGrid::_InRange(double g_lat, double g_lon) const
 {
     return g_lat > _bblat[0] && g_lat < _bblat[1]
         && g_lon > _bblon[0] && g_lon < _bblon[1];
 }
-bool C_hnor::_InRange(int n_row, int n_col) const
+bool CGrid::_InRange(int n_row, int n_col) const
 {
     return n_row >= 0 && n_row < _nrows
         && n_col >= 0 && n_col < _ncols;
 }
-bool _ReadDouble(std::ifstream& in_file, double *val = nullptr)
+bool _ReadDouble(std::ifstream& in_file, double *val = nullptr) // DEPRECATED
 {
 	if (in_file.good())
 	{
@@ -337,7 +356,7 @@ bool _ReadDouble(std::ifstream& in_file, double *val = nullptr)
 	}
 	return false;
 }
-bool C_hnor::_ReadTextFile(const char *txt_file)
+bool CGrid::_ReadTextFile(const char *txt_file) // DEPRECATED
 {
 	std::ifstream  in_file;
 	in_file.open(txt_file);
@@ -357,15 +376,12 @@ bool C_hnor::_ReadTextFile(const char *txt_file)
 	in_file.close();
 	return true;
 }
-bool C_hnor::_ReadBinFile(const char *txt_file)
+bool CGrid::_ReadBinFile(const char *txt_file)
 {
 	std::ifstream  in_file;
 	in_file.open(txt_file, std::ios::binary);
 
-	if (!in_file.good())
-	{
-		return false;
-	}
+	in_file.seekg(_offset);
 
 	for (int i = 0; i < _nrows; ++i){
 	for (int j = 0; j < _ncols; ++j){
@@ -374,22 +390,30 @@ bool C_hnor::_ReadBinFile(const char *txt_file)
 		_fator[i][j] = double(_value_read);
 	}}
 
-	for (int i = 0; i < _nrows; ++i){
-	for (int j = 0; j < _ncols; ++j){
-		float _value_read;
-		in_file.read( reinterpret_cast<char*>(&_value_read), sizeof(float));
-		_incer[i][j] = double(_value_read);
-	}}
-	
+	if (_name != GRID_MAPGEO2015)
+	{	
+		for (int i = 0; i < _nrows; ++i){
+		for (int j = 0; j < _ncols; ++j){
+			float _value_read;
+			in_file.read( reinterpret_cast<char*>(&_value_read), sizeof(float));
+			_incer[i][j] = double(_value_read);
+		}}		
+	}
+
 	in_file.close();
 	return true;
 }
 
-C_hnor::C_hnor(void)
+CGrid::CGrid(GRID_NAME g_name)
 	: _fator(nullptr)
 	, _incer(nullptr)
 {
-	_SetGridImbituba();
+	if (g_name == GRID_IMBITUBA)
+		_SetGridImbituba();
+	if (g_name == GRID_SANTANA)
+		_SetGridSantana();
+	if (g_name == GRID_MAPGEO2015)
+		_SetGridMapgeo();
 	
 	_MemAlloc();
 
@@ -399,7 +423,7 @@ C_hnor::C_hnor(void)
 	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
 }
 
-C_hnor::~C_hnor(void)
+CGrid::~CGrid(void)
 {
 	_MemFree();
 }
@@ -430,14 +454,14 @@ static double **_GridMemAlloc(int nrow, int ncol)
 	return ptr;
 }
 
-void C_hnor::_MemAlloc(void)
+void CGrid::_MemAlloc(void)
 {
 	_MemFree();	
 	_fator = _GridMemAlloc(_nrows, _ncols);
 	_incer = _GridMemAlloc(_nrows, _ncols);
 }
 
-void C_hnor::_MemFree(void)
+void CGrid::_MemFree(void)
 {
 	_GridMemFree(_fator, _nrows, _ncols);
 	_GridMemFree(_incer, _nrows, _ncols);
