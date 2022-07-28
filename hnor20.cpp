@@ -422,7 +422,7 @@ std::ostream& operator << (std::ostream& os, const PointResult& pt)
 	os << "UTM Fuso: " << pt._utm_F << std::endl;
 	os << std::setprecision(5);
 	os << "LAT: " << pt._lat << "\nLON: " << pt._lon << std::endl;
-	os << std::setprecision(2);
+	os << std::setprecision(3);
 	os << "FATOR: " << pt._fator << " m" << std::endl;
 	if (pt._incer < -9990.0)
 		os << "INCERTEZA: n.d." << std::endl;
