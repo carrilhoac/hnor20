@@ -304,8 +304,8 @@ C_hnor::C_hnor(void)
 
 	// TODO: calcular CRC32 do arquivo antes de ler
 
-	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
 	_ReadBinFile("hgeoHNOR2020.geoid");
+	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
 }
 
 C_hnor::~C_hnor(void)
