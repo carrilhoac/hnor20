@@ -89,9 +89,9 @@ private:
 	bool                        _InRange(int n_row, int n_col) const;
 
 private:
-	double                      GetFactorNearest(double g_lat, double g_lon) const;
-	double                      GetFactorBilinear(double g_lat, double g_lon) const;
-	double                      GetFactorBicubic(double g_lat, double g_lon) const;
+	double                      GetNearest(double g_lat, double g_lon, bool _is_uncert = false) const;
+	double                      GetBilinear(double g_lat, double g_lon, bool _is_uncert = false) const;
+	double                      GetBicubic(double g_lat, double g_lon, bool _is_uncert = false) const;
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
 	PointEntry                  GetEntry(int n_row, int n_col) const;

@@ -154,16 +154,16 @@ double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
     switch (m)
     {
         case INTERP_NEAREST:
-            r = GetFactorNearest(g_lat, g_lon);
+            r = GetNearest(g_lat, g_lon);
         break;
         case INTERP_BILINEAR:
-            r = GetFactorBilinear(g_lat, g_lon);
+            r = GetBilinear(g_lat, g_lon);
         break;
         case INTERP_BICUBIC:
-            r = GetFactorBicubic(g_lat, g_lon);
+            r = GetBicubic(g_lat, g_lon);
         break;
         default:
-            r = GetFactorBicubic(g_lat, g_lon);
+            r = GetBicubic(g_lat, g_lon);
         break;
     }
 
@@ -194,7 +194,7 @@ double C_hnor::GetFactor(double g_lat, double g_lon, INTERP_METHOD m) const
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-double C_hnor::GetFactorNearest(double g_lat, double g_lon) const
+double C_hnor::GetNearest(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
@@ -202,13 +202,29 @@ double C_hnor::GetFactorNearest(double g_lat, double g_lon) const
     p.i_col = int(p.d_col +0.5);
 
     p.factor = _fator[p.i_row][p.i_col];
+	p.uncertainty = _incer[p.i_row][p.i_col];
+	
+	if (_is_uncert)
+		return p.uncertainty;
+	
     return p.factor;
 }
 
-double C_hnor::GetFactorBilinear(double g_lat, double g_lon) const
+double C_hnor::GetBilinear(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
+	if (_is_uncert)
+	{
+		double Q00 = _incer[p.i_row   ][p.i_col   ];
+		double Q01 = _incer[p.i_row   ][p.i_col +1];
+		double Q10 = _incer[p.i_row +1][p.i_col   ];
+		double Q11 = _incer[p.i_row +1][p.i_col +1];
+
+		p.uncertainty = _Interp_Bilinear(Q00, Q01, Q10, Q11, p.dif_col, p.dif_row);
+		return p.uncertainty;
+	}
+	
     double Q00 = _fator[p.i_row   ][p.i_col   ];
     double Q01 = _fator[p.i_row   ][p.i_col +1];
     double Q10 = _fator[p.i_row +1][p.i_col   ];
@@ -218,12 +234,21 @@ double C_hnor::GetFactorBilinear(double g_lat, double g_lon) const
     return p.factor;
 }
 
-double C_hnor::GetFactorBicubic(double g_lat, double g_lon) const
+double C_hnor::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 {
     PointEntry p = GetEntry(g_lat, g_lon);
 
 	double QF[4][4];
 	
+	if (_is_uncert)
+	{		
+		for (int i = 0, u = p.i_row -1; i < 4; ++i, ++u){
+		for (int j = 0, v = p.i_col -1; j < 4; ++j, ++v){
+			QF[i][j] = _incer[u][v];
+		} }
+		p.uncertainty = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
+		return p.uncertainty;
+	}
 	for (int i = 0, u = p.i_row -1; i < 4; ++i, ++u){
 	for (int j = 0, v = p.i_col -1; j < 4; ++j, ++v){
 		QF[i][j] = _fator[u][v];
@@ -247,6 +272,7 @@ C_hnor::PointEntry C_hnor::GetEntry(int n_row, int n_col) const
     p.d_lon = _ilon - (p.i_col * _step);
 
     p.factor = _fator[p.i_row][p.i_col];
+	p.uncertainty = _incer[p.i_row][p.i_col];
   //  std::cout << p.d_lat << " " << p.d_lon << std::endl;
 
     return p;
@@ -271,6 +297,7 @@ C_hnor::PointEntry C_hnor::GetEntry(double g_lat, double g_lon) const
     p.dif_col = p.d_col - std::floor(p.d_col);
 
     p.factor = _fator[p.i_row][p.i_col];
+	p.uncertainty = _incer[p.i_row][p.i_col];
   //  std::cout << p.i_row << " " << p.i_col << std::endl;
 
     return p;
