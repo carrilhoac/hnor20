@@ -111,7 +111,6 @@ private:
 	double                      GetBicubic(double g_lat, double g_lon, bool _is_uncert = false) const;
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
-	//PointEntry                  GetEntry(int n_row, int n_col) const;
 
 public:
 	CGrid(GRID_NAME g_name);

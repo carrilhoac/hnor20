@@ -127,8 +127,6 @@ void CGrid::_SetGridImbituba(void)
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetImbituba();
-	
-	//std::cout << "Grid set to IMBITUBA\n";
 }
 void CGrid::_SetGridSantana(void)
 {
@@ -145,7 +143,6 @@ void CGrid::_SetGridSantana(void)
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetSantana();
-	//std::cout << "Grid set to SANTANA\n";
 }
 void CGrid::_SetGridMapgeo(void)
 {
@@ -162,7 +159,6 @@ void CGrid::_SetGridMapgeo(void)
 	_UpdateBoundingBox();
 	
 	_offset = _OffsetMapgeo();
-	//std::cout << "Grid set to MAPGEO\n";
 }
 void CGrid::_UpdateBoundingBox(void)
 {
@@ -277,9 +273,7 @@ double CGrid::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 		for (int j = 0, v = p.i_col -1; j < 4; ++j, ++v){
 			QF[i][j] = _incer[u][v];
 		} }
-//	std::cout << "ok_0" << std::endl;
 		p.uncertainty = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
-//	std::cout << "ok_i" << std::endl;
 		return p.uncertainty;
 	}
 	for (int i = 0, u = p.i_row -1; i < 4; ++i, ++u){
@@ -287,41 +281,17 @@ double CGrid::GetBicubic(double g_lat, double g_lon, bool _is_uncert) const
 		QF[i][j] = _fator[u][v];
 	} }
 
-//	std::cout << "ok_1" << std::endl;
     p.factor = _Interp_Bicubic(QF, p.dif_col, p.dif_row);
-//	std::cout << "ok_f" << std::endl;
     return p.factor;
 }
-/*
-CGrid::PointEntry CGrid::GetEntry(int n_row, int n_col) const
-{
-    PointEntry p;
 
-    if (!_InRange(n_row, n_col))
-        return p;
-
-    p.i_row = n_row;
-    p.i_col = n_col;
-
-    p.d_lat = _ilat - (p.i_row * _step);
-    p.d_lon = _ilon - (p.i_col * _step);
-
-    p.factor = _fator[p.i_row][p.i_col];
-	p.uncertainty = _incer[p.i_row][p.i_col];
-  //  std::cout << p.d_lat << " " << p.d_lon << std::endl;
-
-    return p;
-}*/
 CGrid::PointEntry CGrid::GetEntry(double g_lat, double g_lon) const
 {
     PointEntry p;
-	
-	//std::cout << "ok1" << std::endl;
-	
+		
     if (!_InRange(g_lat, g_lon))
         return p;
 
-	//std::cout << "ok2" << std::endl;
     p.d_lat = g_lat;
     p.d_lon = g_lon;
 
@@ -336,16 +306,12 @@ CGrid::PointEntry CGrid::GetEntry(double g_lat, double g_lon) const
  
     p.factor = _fator[p.i_row][p.i_col];
 	p.uncertainty = _incer[p.i_row][p.i_col];
-   // std::cout << p.i_row << " " << p.i_col << std::endl;
 
     return p;
 }
 
 bool CGrid::_InRange(double g_lat, double g_lon) const
 {
-	//std::cout << g_lat << " " << _bblat[0] << " " << _bblat[1] << std::endl;
-	//std::cout << g_lon << " " << _bblon[0] << " " << _bblon[1] << std::endl;
-	
     return g_lat > _bblat[0] && g_lat < _bblat[1]
         && g_lon > _bblon[0] && g_lon < _bblon[1];
 }
@@ -398,7 +364,6 @@ CGrid::CGrid(GRID_NAME g_name)
 	// TODO: calcular CRC32 do arquivo antes de ler
 
 	_ReadBinFile("hgeoHNOR2020.geoid");
-	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
 }
 
 CGrid::~CGrid(void)
@@ -437,8 +402,6 @@ void CGrid::_MemAlloc(void)
 	_MemFree();	
 	_fator = _GridMemAlloc(_nrows, _ncols);
 	_incer = _GridMemAlloc(_nrows, _ncols);
-	
-	//std::cout << _nrows << " "  << _ncols << std::endl;
 }
 
 void CGrid::_MemFree(void)
@@ -489,24 +452,19 @@ PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
 	UTM::LLtoUTM(g_lat, g_lon, r._utm_E, r._utm_N, r._utm_F);
 	
 	if (PnPoly::Get().InsideSANTANA(g_lat, g_lon))
-	{
-		//std::cout << "santana" << std::endl;
-		
+	{		
 		r._fator = _santana.GetValue(g_lat, g_lon, false, m);
 		r._incer = _santana.GetValue(g_lat, g_lon, true, m);
 		r._model = "hgeoHNOR_SANTANA";
 		return r;
 	} 
 	if (PnPoly::Get().InsideMAPGEO15(g_lat, g_lon))
-	{
-		//std::cout << "mapgeo15" << std::endl;
-		
+	{		
 		r._fator = _mapgeo15.GetValue(g_lat, g_lon, false, m);
 		r._incer = _mapgeo15.GetValue(g_lat, g_lon, true, m);
 		r._model = "MAPGEO2015_OESTE";
 		return r;
 	}
-	//std::cout << "imbituba" << std::endl;
 
 	r._fator = _imbituba.GetValue(g_lat, g_lon, false, m);
 	r._incer = _imbituba.GetValue(g_lat, g_lon, true, m);
