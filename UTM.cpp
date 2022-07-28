@@ -84,7 +84,7 @@ namespace UTM
     {
         char LetterDesignator;
 
-        if     (Lat >= 0.0)  LetterDesignator = 'N';
+        if     (Lat > 0.0)  LetterDesignator = 'N';
         else  LetterDesignator = 'S';
 
         return LetterDesignator;
