@@ -286,17 +286,25 @@ bool C_hnor::_ReadBinFile(const char *txt_file)
 
 	for (int i = 0; i < _nrows; ++i){
 	for (int j = 0; j < _ncols; ++j){
-		float _fator_read;
-		in_file.read( reinterpret_cast<char*>(&_fator_read), sizeof(float));
-		_fator[i][j] = double(_fator_read);
+		float _value_read;
+		in_file.read( reinterpret_cast<char*>(&_value_read), sizeof(float));
+		_fator[i][j] = double(_value_read);
 	}}
 
+	for (int i = 0; i < _nrows; ++i){
+	for (int j = 0; j < _ncols; ++j){
+		float _value_read;
+		in_file.read( reinterpret_cast<char*>(&_value_read), sizeof(float));
+		_incer[i][j] = double(_value_read);
+	}}
+	
 	in_file.close();
 	return true;
 }
 
 C_hnor::C_hnor(void)
 	: _fator(nullptr)
+	, _incer(nullptr)
 {
 	_SetGridImbituba();
 	
@@ -313,30 +321,41 @@ C_hnor::~C_hnor(void)
 	_MemFree();
 }
 
+static void _GridMemFree(double **ptr, int nrow, int ncol)
+{
+	if (ptr)
+	{
+		for (int i = 0; i < nrow; ++i)
+		{
+			if (ptr[i])
+			{
+				delete [] ptr[i];
+				ptr[i] = nullptr;
+			}
+		}
+		delete [] ptr;
+		ptr = nullptr;
+	}
+}
+static double **_GridMemAlloc(int nrow, int ncol)
+{
+	double **ptr = new double * [ nrow ];
+	for (int i = 0; i < nrow; ++i)
+	{
+		ptr[i] = new double[ ncol ];
+	}
+	return ptr;
+}
+
 void C_hnor::_MemAlloc(void)
 {
-	_MemFree();
-
-	_fator = new double * [ _nrows ];
-	for (int i = 0; i < _nrows; ++i)
-	{
-		_fator[i] = new double[ _ncols ];
-	}
+	_MemFree();	
+	_fator = _GridMemAlloc(_nrows, _ncols);
+	_incer = _GridMemAlloc(_nrows, _ncols);
 }
 
 void C_hnor::_MemFree(void)
 {
-	if (_fator)
-	{
-		for (int i = 0; i < _nrows; ++i)
-		{
-			if (_fator[i])
-			{
-				delete [] _fator[i];
-				_fator[i] = nullptr;
-			}
-		}
-		delete [] _fator;
-		_fator = nullptr;
-	}
+	_GridMemFree(_fator, _nrows, _ncols);
+	_GridMemFree(_incer, _nrows, _ncols);
 }

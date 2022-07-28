@@ -99,6 +99,7 @@ private:
 private:
     // geoid model conversion factors
 	double **				    _fator;
+	double **					_incer;
 
 	// hgeoHNOR2020 grid constants
 	static constexpr double     _istep      = 12.0;
