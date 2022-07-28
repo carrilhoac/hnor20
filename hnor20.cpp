@@ -453,10 +453,12 @@ std::ostream& operator << (std::ostream& os, const PointResult& pt)
 {
 	os << std::fixed;
 	os << std::endl;
+	os << std::setprecision(3);
+	os << "UTM E: " << pt._utm_E << " m" << std::endl;
+	os << "UTM N: " << pt._utm_N << " m" << std::endl;
+	os << "UTM Fuso: " << pt._utm_F << std::endl;
 	os << std::setprecision(5);
 	os << "LAT: " << pt._lat << "\nLON: " << pt._lon << std::endl;
-	os << std::setprecision(3);
-	//os << "\t" << pt._utm_E << "\t" << pt._utm_N << "\t" << pt._utm_Fuso << "\t" << pt._utm_Emisph << std::endl; 
 	os << std::setprecision(2);
 	os << "FATOR: " << pt._fator << " m" << std::endl;
 	if (pt._incer < -9990.0)
@@ -475,6 +477,8 @@ HNOR::HNOR(void)
 	, _mapgeo15(GRID_MAPGEO2015)
 { }
 
+#include "utm.h"
+
 PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
 {
 	PointResult r;
@@ -482,13 +486,15 @@ PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
 	r._lat = g_lat;
 	r._lon = g_lon;
 	
+	UTM::LLtoUTM(g_lat, g_lon, r._utm_E, r._utm_N, r._utm_F);
+	
 	if (PnPoly::Get().InsideSANTANA(g_lat, g_lon))
 	{
 		//std::cout << "santana" << std::endl;
 		
 		r._fator = _santana.GetValue(g_lat, g_lon, false, m);
 		r._incer = _santana.GetValue(g_lat, g_lon, true, m);
-		r._model = "SANTANA";
+		r._model = "hgeoHNOR_SANTANA";
 		return r;
 	} 
 	if (PnPoly::Get().InsideMAPGEO15(g_lat, g_lon))
@@ -497,13 +503,13 @@ PointResult HNOR::Get(double g_lat, double g_lon, INTERP_METHOD m) const
 		
 		r._fator = _mapgeo15.GetValue(g_lat, g_lon, false, m);
 		r._incer = _mapgeo15.GetValue(g_lat, g_lon, true, m);
-		r._model = "MAPGEO2015";
+		r._model = "MAPGEO2015_OESTE";
 		return r;
 	}
 	//std::cout << "imbituba" << std::endl;
 
 	r._fator = _imbituba.GetValue(g_lat, g_lon, false, m);
 	r._incer = _imbituba.GetValue(g_lat, g_lon, true, m);
-	r._model = "IMBITUBA";
+	r._model = "hgeoHNOR_IMBITUBA";
 	return r;	
 }

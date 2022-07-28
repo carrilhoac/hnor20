@@ -111,7 +111,7 @@ private:
 	double                      GetBicubic(double g_lat, double g_lon, bool _is_uncert = false) const;
 
 	PointEntry                  GetEntry(double g_lat, double g_lon) const;
-	PointEntry                  GetEntry(int n_row, int n_col) const;
+	//PointEntry                  GetEntry(int n_row, int n_col) const;
 
 public:
 	CGrid(GRID_NAME g_name);
@@ -129,8 +129,7 @@ struct PointResult
 		
 	double 			_utm_E;
 	double			_utm_N;
-	int				_utm_Fuso;
-	char			_utm_Emisph;	 // N or S
+	char			_utm_F[4];
 		
 	double 			_fator;
 	double			_incer;
