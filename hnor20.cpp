@@ -274,6 +274,26 @@ bool C_hnor::_ReadTextFile(const char *txt_file)
 	in_file.close();
 	return true;
 }
+bool C_hnor::_ReadBinFile(const char *txt_file)
+{
+	std::ifstream  in_file;
+	in_file.open(txt_file, std::ios::binary);
+
+	if (!in_file.good())
+	{
+		return false;
+	}
+
+	for (int i = 0; i < _nrows; ++i){
+	for (int j = 0; j < _ncols; ++j){
+		float _fator_read;
+		in_file.read( reinterpret_cast<char*>(&_fator_read), sizeof(float));
+		_fator[i][j] = double(_fator_read);
+	}}
+
+	in_file.close();
+	return true;
+}
 
 C_hnor::C_hnor(void)
 	: _fator(nullptr)
@@ -282,7 +302,8 @@ C_hnor::C_hnor(void)
 
 	// TODO: calcular CRC32 do arquivo antes de ler
 
-	_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
+	//_ReadTextFile("hgeoHNOR2020__IMBITUBA__fator-conversao.txt");
+	_ReadBinFile("hgeoHNOR2020.geoid");
 }
 
 C_hnor::~C_hnor(void)

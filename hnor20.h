@@ -76,6 +76,7 @@ private:
 	void 					    _MemFree(void);
 
 	bool					    _ReadTextFile(const char *txt_file);
+	bool					    _ReadBinFile(const char *txt_file);
 
 	bool                        _InRange(double g_lat, double g_lon) const;
 	bool                        _InRange(int n_row, int n_col) const;
