@@ -1,6 +1,8 @@
 #include "args.h"
 #include <algorithm>
 
+#include <iostream>
+
 std::string CArgParse::_StrToUpper(const std::string& src)
 {
 	std::string dst = src ;
@@ -22,16 +24,23 @@ CArgParse::CArgParse(int argc, char **argv)
 }
 bool CArgParse::CheckOption(const std::string& s_opt)const
 {
+	if (!args.size())
+		return false;
+	
+	std::size_t n_opt = s_opt.length();
 	std::string s_opt_upper = _StrToUpper(s_opt);
 	
 	for (std::size_t i = 0; i < args_upper.size(); ++i)
-		if (s_opt_upper.compare(args_upper[i]) == 0)
+		if (args_upper[i].compare(0, n_opt, s_opt_upper) == 0)
 			return true;
 	
 	return false;
 }
-std::string CArgParse::GetValueStr(const std::string& s_opt)const
+std::string CArgParse::GetValueStr(const std::string& s_opt, const std::string& s_sep)const
 {
+	if (!args.size())
+		return "";
+	
 	std::string s_opt_upper = _StrToUpper(s_opt);
 	
 	for (std::size_t i = 0; i < args_upper.size(); ++i)
@@ -41,18 +50,18 @@ std::string CArgParse::GetValueStr(const std::string& s_opt)const
 		
 		if (s_opt_upper.compare(s_arg) == 0)
 		{
-			std::size_t s_sep = args[i].find_last_of("=") +1; 
-			return args[i].substr(s_sep);
+			std::size_t n_sep = args[i].find_last_of(s_sep) +1; 
+			return args[i].substr(n_sep);
 		}
 	}
 	
 	return "";
 }
-int CArgParse::GetValueInt(const std::string& s_opt)const
+int CArgParse::GetValueInt(const std::string& s_opt, const std::string& s_sep)const
 {
-	return std::stoi( GetValueStr(s_opt) );
+	return std::stoi( GetValueStr(s_opt, s_sep) );
 }
-double CArgParse::GetValueDbl(const std::string& s_opt)const
+double CArgParse::GetValueDbl(const std::string& s_opt, const std::string& s_sep)const
 {
-	return std::stod( GetValueStr(s_opt) );
+	return std::stod( GetValueStr(s_opt, s_sep) );
 }
