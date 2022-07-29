@@ -15,6 +15,7 @@
 #include "pnpoly.h"
 
 #include <cmath>
+#include <sstream>
 #include <fstream>
 #include <iostream>
 
@@ -432,8 +433,6 @@ std::ostream& operator << (std::ostream& os, const PointResult& pt)
 	os << std::endl;	
 	return os;
 }
-
-#include <sstream>
 
 std::string	PointResult::GetHeaderCSV(){
 	std::stringstream ss;

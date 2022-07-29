@@ -1,14 +1,7 @@
 #include "args.h"
-#include <algorithm>
+#include "filesys.h"
 
 #include <iostream>
-
-std::string CArgParse::_StrToUpper(const std::string& src)
-{
-	std::string dst = src ;
-	std::transform(dst.begin(), dst.end(), dst.begin(), ::toupper);
-	return dst;	
-}
 
 CArgParse::CArgParse(int argc, char **argv)
 {
@@ -19,7 +12,7 @@ CArgParse::CArgParse(int argc, char **argv)
 		if (args.back()[0] == '-')
 			args.back().erase(0,1);
 		
-		args_upper.push_back( _StrToUpper(args.back()) );
+		args_upper.push_back( filesys::str_to_upper(args.back()) );
 	}
 }
 bool CArgParse::CheckOption(const std::string& s_opt)const
@@ -28,7 +21,7 @@ bool CArgParse::CheckOption(const std::string& s_opt)const
 		return false;
 	
 	std::size_t n_opt = s_opt.length();
-	std::string s_opt_upper = _StrToUpper(s_opt);
+	std::string s_opt_upper = filesys::str_to_upper(s_opt);
 	
 	for (std::size_t i = 0; i < args_upper.size(); ++i)
 		if (args_upper[i].compare(0, n_opt, s_opt_upper) == 0)
@@ -41,7 +34,7 @@ std::string CArgParse::GetValueStr(const std::string& s_opt, const std::string& 
 	if (!args.size())
 		return "";
 	
-	std::string s_opt_upper = _StrToUpper(s_opt);
+	std::string s_opt_upper = filesys::str_to_upper(s_opt);
 	
 	for (std::size_t i = 0; i < args_upper.size(); ++i)
 	{

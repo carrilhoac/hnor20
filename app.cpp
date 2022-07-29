@@ -11,6 +11,19 @@ CAppHnor::CAppHnor(int argc, char **argv)
 	DelegateTask();
 }
 
+void CAppHnor::WriteCSV(const std::string& s_name)const{
+	std::ofstream out_file;
+	
+	out_file.open(s_name.c_str());
+	
+	out_file << PointResult::GetHeaderCSV() << std::endl;
+	for (std::size_t i = 0; i < result.size(); ++i) {
+		out_file << result[i].ToStringCSV() << std::endl;
+	}
+	
+	out_file.close();
+}
+	
 void CAppHnor::ParseLine(const std::string& s_line, int col_lat, int col_lon)
 {		
 	std::stringstream ss(s_line);
@@ -69,22 +82,32 @@ void CAppHnor::ExecTextFile(void)
 		n_col_lon = args.GetValueInt("col_lon");
 			
 	ReadTextFile( args.GetValueStr("in"), n_col_lat, n_col_lon );
+	
+//	WriteCSV("teste.csv");
 }
 
 bool CAppHnor::DelegateTask(void)
 {
+	bool proc_exec = false;
 	if (args.CheckOption("lat") && args.CheckOption("lon"))
 	{
 		ExecSinglePoint();
-		return true;
+		proc_exec = true;
 	}		
 	
 	if (args.CheckOption("in"))
 	{
 		ExecTextFile();
-		return true;
+		proc_exec = true;
 	}
 	
+	if (proc_exec)
+	{
+		if (args.CheckOption("out"))
+		{
+			
+		}
+	}
 	std::cout << Help();
 	return false;
 }
