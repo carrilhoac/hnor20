@@ -16,7 +16,6 @@ void CAppHnor::WriteCSV(const std::string& s_name)const{
 	std::ofstream out_file;
 	
 	out_file.open(s_name.c_str());
-	
 	out_file << PointResult::GetHeaderCSV() << std::endl;
 	for (std::size_t i = 0; i < result.size(); ++i) {
 		out_file << result[i].ToStringCSV() << std::endl;
@@ -29,7 +28,6 @@ void CAppHnor::WriteTXT(const std::string& s_name)const{
 	std::ofstream out_file;
 	
 	out_file.open(s_name.c_str());
-	
 	out_file << PointResult::GetHeaderTXT() << std::endl;
 	for (std::size_t i = 0; i < result.size(); ++i) {
 		out_file << result[i].ToStringTXT() << std::endl;
@@ -95,8 +93,6 @@ void CAppHnor::ExecTextFile(void)
 		n_col_lon = args.GetValueInt("col_lon");
 			
 	ReadTextFile( args.GetValueStr("in"), n_col_lat, n_col_lon );
-	
-//	WriteCSV("teste.csv");
 }
 
 bool CAppHnor::DelegateTask(void)
@@ -141,7 +137,15 @@ std::string CAppHnor::Help(void)
 	"Aplicativo para obtencao da separacao (ondulacao) geoidal, isto e diferenca entre altitudes\n"
 	"geometricas e altitudes ortometricas (fisicas) utilizando o modelo geoidal hgeoHNOR20202,\n"
 	"disponibilzado pelo Instituto Brasileiro de Geografia e Estatistica - IBGE\n\n"
-	"Ferramenta desenvolvida por Andre Caceres Carrilho\n";
+	"Ferramenta desenvolvida por Andre Caceres Carrilho\n\n";
+
+	s_help += 
+	"UTILIZACAO:\n"
+	"  1.   hnor lat=-15.8 lon=-47.865\n"
+	"  2.   hnor lat=-15.8 lon=-47.865 out=resultado.txt\n"
+	"  3.   hnor lon=-47.865 lat=-15.8 out=resultado.csv\n"
+	"  4.   hnor in=pontos.txt out=resultado.csv\n"
+	"  5.   hnor in=pontos.txt col_lat=2 col_lon=3 out=resultado.csv\n";
 	
 	return s_help;
 }
