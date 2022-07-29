@@ -2,15 +2,11 @@
 #ifndef __ARG_PARSER_H__
 #define __ARG_PARSER_H__
 
-//#include <iostream>
 #include <string>
 #include <vector>
 
 ///////////////////////////////////////////////////////////////////
 class CArgParse {
-private:
-	//static std::string 		_StrToUpper(const std::string& src);
-
 private:
 	std::vector<std::string> 		args;
 	std::vector<std::string> 		args_upper;

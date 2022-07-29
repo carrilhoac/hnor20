@@ -38,11 +38,16 @@ namespace filesys
 	}
 	
 	std::string 	str_to_upper(const char *src);
+	std::string 	str_to_lower(const char *src);	// todo
+	
 	std::string 	base_name(const char *path);
 	std::string 	remove_extension(const char *filename);
 	std::string 	get_extension(const char *filename);
 	
-//	bool 			check_extension();
+	std::size_t 	file_size(const char *filename);	// todo
+	bool			file_exists(const char *filename);	// todo
+	
+	bool 			check_extension(const char *filename, const char *extension);
 }
 
 #endif 

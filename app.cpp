@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "app.h"
+#include "filesys.h"
 
 CAppHnor::CAppHnor(int argc, char **argv)
 	: args(argc, argv)
@@ -19,6 +20,19 @@ void CAppHnor::WriteCSV(const std::string& s_name)const{
 	out_file << PointResult::GetHeaderCSV() << std::endl;
 	for (std::size_t i = 0; i < result.size(); ++i) {
 		out_file << result[i].ToStringCSV() << std::endl;
+	}
+	
+	out_file.close();
+}
+	
+void CAppHnor::WriteTXT(const std::string& s_name)const{
+	std::ofstream out_file;
+	
+	out_file.open(s_name.c_str());
+	
+	out_file << PointResult::GetHeaderTXT() << std::endl;
+	for (std::size_t i = 0; i < result.size(); ++i) {
+		out_file << result[i].ToStringTXT() << std::endl;
 	}
 	
 	out_file.close();
@@ -42,7 +56,6 @@ void CAppHnor::ParseLine(const std::string& s_line, int col_lat, int col_lon)
 	inputs.push_back( c_point );
 	
 	result.push_back( geoid.Get(c_point.d_lat, c_point.d_lon) );
-//	std::cout << c_point.d_lat << " " << c_point.d_lon << std::endl;
 }
 
 bool CAppHnor::ReadTextFile(const std::string& txt_file_name, int col_lat, int col_lon)
@@ -105,8 +118,15 @@ bool CAppHnor::DelegateTask(void)
 	{
 		if (args.CheckOption("out"))
 		{
+			std::string dst_fn = args.GetValueStr("out");
+		
+			if (filesys::check_extension(dst_fn.c_str(), "csv"))
+				WriteCSV(dst_fn);
+			else
+				WriteTXT(dst_fn);
 			
 		}
+		return true;
 	}
 	std::cout << Help();
 	return false;

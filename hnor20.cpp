@@ -443,6 +443,16 @@ std::string	PointResult::GetHeaderCSV(){
 	
 	return ss.str();
 }
+std::string	PointResult::GetHeaderTXT(){
+	std::stringstream ss;
+	
+	ss << "\tUTM_E\tUTM_N\tUTM_FUSO";
+	ss << "\tLAT\tLON";
+	ss << "\tFATOR\tINCERTEZA\tMODELO";
+	
+	return ss.str();
+}
+	
 	
 std::string	PointResult::ToStringTXT()const{
 	std::stringstream ss;

@@ -135,6 +135,7 @@ public:
 	std::string 	_model;
 
 public:
+	static std::string	GetHeaderTXT();
 	static std::string	GetHeaderCSV();
 	
 	std::string		ToStringTXT()const;
