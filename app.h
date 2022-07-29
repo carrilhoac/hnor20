@@ -24,6 +24,9 @@ private:
 public:
 	CAppHnor(int argc, char **argv);
 	
+	void			WriteCSV(const std::string& s_name)const;
+	void 			WriteTXT(const std::string& s_name)const;
+	
 	void 			ParseLine(const std::string& s_line, int col_lat, int col_lon);
 	bool 			ReadTextFile(const std::string& txt_file_name, int col_lat, int col_lon);
 	void 			ExecSinglePoint(void);

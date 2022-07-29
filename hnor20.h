@@ -121,8 +121,8 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-struct PointResult 
-{
+class PointResult  {
+public:
 	double			_lat;			 // WGS84
 	double			_lon;
 		
@@ -133,6 +133,12 @@ struct PointResult
 	double 			_fator;
 	double			_incer;
 	std::string 	_model;
+
+public:
+	static std::string	GetHeaderCSV();
+	
+	std::string		ToStringTXT()const;
+	std::string		ToStringCSV()const;
 	
 	friend std::ostream& operator << (std::ostream& os, const PointResult& pt);
 };

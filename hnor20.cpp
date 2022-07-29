@@ -433,6 +433,58 @@ std::ostream& operator << (std::ostream& os, const PointResult& pt)
 	return os;
 }
 
+#include <sstream>
+
+std::string	PointResult::GetHeaderCSV(){
+	std::stringstream ss;
+	
+	ss << "UTM_E;UTM_N;UTM_FUSO;";
+	ss << "LAT;LON;";
+	ss << "FATOR;INCERTEZA;MODELO;";
+	
+	return ss.str();
+}
+	
+std::string	PointResult::ToStringTXT()const{
+	std::stringstream ss;
+	ss << std::fixed;
+	
+	ss << std::setprecision(3);
+	ss << "\t" << _utm_E;
+	ss << "\t" << _utm_N;
+	ss << "\t" << _utm_F;
+	
+	ss << std::setprecision(8);
+	ss << "\t" << _lat;
+	ss << "\t" << _lon;
+	
+	ss << std::setprecision(3);
+	ss << "\t" << _fator;
+	ss << "\t" << _incer;
+	ss << "\t" << _model;
+	
+	return ss.str();
+}
+std::string	PointResult::ToStringCSV()const{
+	std::stringstream ss;
+	ss << std::fixed;
+	
+	ss << std::setprecision(3);
+	ss << _utm_E << ";";
+	ss << _utm_N << ";";
+	ss << _utm_F << ";";
+	
+	ss << std::setprecision(8);
+	ss << _lat << ";";
+	ss << _lon << ";";
+	
+	ss << std::setprecision(3);
+	ss << _fator << ";";
+	ss << _incer << ";";
+	ss << _model << ";";
+	
+	return ss.str();
+}
 
 HNOR::HNOR(void)
 	: _imbituba(GRID_IMBITUBA)
