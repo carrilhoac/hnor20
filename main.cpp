@@ -41,7 +41,8 @@ public:
 		c_point.d_lon = std::stod( s_tokens[col_lon] );
 		inputs.push_back( c_point );
 		
-		std::cout << c_point.d_lat << " " << c_point.d_lon << std::endl;
+		result.push_back( geoid.Get(c_point.d_lat, c_point.d_lon) );
+	//	std::cout << c_point.d_lat << " " << c_point.d_lon << std::endl;
 	}
 	
 	bool ReadTextFile(const std::string& txt_file_name, int col_lat, int col_lon)
