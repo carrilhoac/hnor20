@@ -2,7 +2,7 @@
 IBGE hgeoHNOR2020 geoidal model
 
 BUILD
-* g++ src\*.cpp -Wall -O2 -o bin\hnor
+* g++ src\\*.cpp -Wall -O2 -o bin\\hnor
 
 INTERP ANALYSIS
 * BICUBIC     0.004893 m
