@@ -15,6 +15,9 @@
 #include <cstdio>
 #include <cstdlib>
 
+#if _MSC_VER > 1100 
+    #define M_PI 3.1415926535897932384626
+#endif 
 
 #define RAD_TO_DEG 		(180.0 / M_PI)
 #define DEG_TO_RAD 		(M_PI / 180.0)
