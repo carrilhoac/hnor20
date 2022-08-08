@@ -1,10 +1,6 @@
 
 #include "pnpoly.h"
 
-#if __cplusplus < 199711L
-	#error "this code requires C++11 or later"
-#endif 
-
 extern "C" 
 {
 	// Source: https://wrfranklin.org/Research/Short_Notes/pnpoly.html
