@@ -116,7 +116,7 @@ bool CAppHnor::DelegateTask(void)
 		{
 			std::string dst_fn = args.GetValueStr("out");
 		
-			if (filesys::check_extension(dst_fn.c_str(), "csv"))
+			if (filesys::path::check_extension(dst_fn.c_str(), "csv"))
 				WriteCSV(dst_fn);
 			else
 				WriteTXT(dst_fn);
